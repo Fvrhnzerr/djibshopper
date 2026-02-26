@@ -25,6 +25,7 @@
             --whatsapp-color: #25D366;
             --text-color: #222222;
             --danger-color: #ff4444;
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
         body {
@@ -34,6 +35,293 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: var(--text-color);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                        url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background-color: var(--glass);
+            backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 40px 25px; }
+            .container { padding: 30px 20px; }
+        }
+
+        .logo-container { margin-bottom: 25px; }
+        .logo-container img { max-width: 140px; height: auto; }
+
+        h2 {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            font-size: 22px;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        /* --- MODE PAUSE --- */
+        #pause-message {
+            display: none;
+            padding: 40px 10px;
+        }
+        .pause-icon { font-size: 50px; margin-bottom: 20px; display: block; }
+        .pause-text { font-size: 18px; line-height: 1.6; color: #555; }
+
+        /* --- MODE ACTIF --- */
+        .item-block {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #eaeaea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            position: relative;
+            text-align: left;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-title { font-weight: bold; color: var(--primary-color); font-size: 13px; text-transform: uppercase; }
+
+        .remove-btn {
+            background: #ffeeee;
+            color: var(--danger-color);
+            border: 1px solid #ffcccc;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase; }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary-color); }
+
+        .add-item-btn {
+            background: transparent;
+            border: 2px dashed #bbb;
+            color: #555;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .total-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        .total-price { font-size: 26px; font-weight: bold; display: block; margin-bottom: 5px; }
+        .total-subtitle { font-size: 11px; opacity: 0.8; }
+
+        .whatsapp-btn {
+            width: 100%;
+            background-color: var(--whatsapp-color);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); }
+        .whatsapp-icon { margin-right: 10px; font-size: 18px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" alt="Logo SHEIN" onerror="this.style.display='none'; document.getElementById('logo-secours').style.display='block';">
+            <h1 id="logo-secours" style="display: none; font-family: 'Helvetica', sans-serif; font-size: 38px; font-weight: 900; margin: 0; text-transform: uppercase;">SHEIN</h1>
+        </div>
+        
+        <h2>🛍️ Djib'Shopper 🇩🇯</h2>
+
+        <div id="pause-message">
+            <span class="pause-icon">🌙</span>
+            <div class="pause-text">
+                <strong>Nous prenons une courte pause.</strong><br><br>
+                Le service de commande est temporairement indisponible. <br>
+                Revenez très vite pour vos prochaines pépites SHEIN !
+            </div>
+        </div>
+
+        <div id="active-service">
+            <div id="items-container">
+                <div class="item-block">
+                    <div class="item-header"><span class="item-title">Article N°1</span></div>
+                    <div class="input-group">
+                        <label>Lien de l'article SHEIN</label>
+                        <input type="url" class="lien-input" placeholder="Collez le lien ici">
+                    </div>
+                    <div class="input-group" style="display: flex; gap: 10px;">
+                         <div style="flex: 1;">
+                            <label>Taille / Couleur</label>
+                            <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                         </div>
+                         <div style="flex: 1;">
+                            <label>Prix sur le site ($)</label>
+                            <input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article</button>
+
+            <div class="total-section">
+                <span id="grandTotal" class="total-price">0 FDJ</span>
+                <span class="total-subtitle">Total estimé (Commission et livraison incluses)</span>
+            </div>
+
+            <button class="whatsapp-btn" onclick="envoyerWhatsApp()">
+                <span class="whatsapp-icon">➤</span> Valider la commande
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================
+           PARAMÈTRES DE TON BUSINESS
+           ========================================== */
+        const SERVICE_ACTIF = true;  // <--- CHANGE EN 'false' POUR FERMER LE SITE
+        const TAUX_DE_CHANGE = 185; 
+        const MARGE = 1.15; 
+        const FRAIS_FIXES_PAR_ARTICLE = 500; 
+        const NUMERO_WHATSAPP = "33766901141"; 
+        /* ========================================== */
+
+        // Gestion de l'affichage (Pause ou Actif)
+        if (!SERVICE_ACTIF) {
+            document.getElementById('active-service').style.display = 'none';
+            document.getElementById('pause-message').style.display = 'block';
+        }
+
+        // PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                 navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4geyBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7IH0pOw==');
+            });
+        }
+
+        let compteurArticles = 1;
+        let grandTotalFDJ = 0;
+
+        function ajouterArticle() {
+            compteurArticles++;
+            const container = document.getElementById('items-container');
+            const nouveauBloc = document.createElement('div');
+            nouveauBloc.className = 'item-block';
+            nouveauBloc.innerHTML = `
+                <div class="item-header">
+                    <span class="item-title">Article N°${compteurArticles}</span>
+                    <button class="remove-btn" onclick="supprimerArticle(this)">✖</button>
+                </div>
+                <div class="input-group">
+                    <label>Lien de l'article SHEIN</label>
+                    <input type="url" class="lien-input" placeholder="Collez le lien ici">
+                </div>
+                <div class="input-group" style="display: flex; gap: 10px;">
+                     <div style="flex: 1;"><label>Taille / Couleur</label><input type="text" class="options-input" placeholder="Ex: M, Rouge"></div>
+                     <div style="flex: 1;"><label>Prix sur le site ($)</label><input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()"></div>
+                </div>`;
+            container.appendChild(nouveauBloc);
+        }
+
+        function supprimerArticle(bouton) {
+            bouton.closest('.item-block').remove();
+            calculerTotal();
+        }
+
+        function calculerTotal() {
+            let totalDollars = 0;
+            let nombreArticlesValides = 0;
+            document.querySelectorAll('.prix-input').forEach(input => {
+                let prix = parseFloat(input.value);
+                if (prix > 0) { totalDollars += prix; nombreArticlesValides++; }
+            });
+
+            if (totalDollars > 0) {
+                grandTotalFDJ = Math.round((totalDollars * TAUX_DE_CHANGE * MARGE) + (nombreArticlesValides * FRAIS_FIXES_PAR_ARTICLE));
+                document.getElementById('grandTotal').innerText = grandTotalFDJ.toLocaleString() + " FDJ";
+            } else {
+                document.getElementById('grandTotal').innerText = "0 FDJ";
+            }
+        }
+
+        function envoyerWhatsApp() {
+            gtag('event', 'clic_commande_whatsapp', { 'event_category': 'Bouton', 'event_label': 'Envoi vers WhatsApp' });
+            
+            let message = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande SHEIN :\n\n";
+            let auMoinsUnArticle = false;
+            let indexReel = 1;
+
+            document.querySelectorAll('.item-block').forEach((bloc) => {
+                let lien = bloc.querySelector('.lien-input').value;
+                let prix = bloc.querySelector('.prix-input').value;
+                if(lien && prix) {
+                    auMoinsUnArticle = true;
+                    message += `📦 *Article N°${indexReel}* :\n🔗 ${lien}\n🎨 ${bloc.querySelector('.options-input').value || "Standard"}\n💲 ${prix} $\n\n`;
+                    indexReel++;
+                }
+            });
+
+            if(!auMoinsUnArticle) { alert("Merci de remplir au moins un lien et un prix !"); return; }
+
+            message += `------------------\n💰 *TOTAL À PAYER : ${grandTotalFDJ.toLocaleString()} FDJ*\n(Commissions et livraison incluses)`;
+            window.open("https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(message), "_blank");
+        }
+    </script>
+</body>
+</html>
             min-height: 100vh;
             box-sizing: border-box;
             color: var(--text-color);
