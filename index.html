@@ -19,13 +19,11 @@
     <link rel="apple-touch-icon" href="./logo.svg">
 
     <style>
-        /* --- DESIGN LUXE & PRO --- */
         :root {
             --primary-color: #000000;
             --whatsapp-color: #25D366;
             --text-color: #222222;
             --danger-color: #ff4444;
-            --glass: rgba(255, 255, 255, 0.95);
         }
 
         body {
@@ -35,6 +33,231 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: var(--text-color);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                        url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .logo-container { margin-bottom: 25px; }
+        .logo-container img { max-width: 140px; height: auto; }
+
+        h2 {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            font-size: 22px;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .item-block {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #eaeaea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            text-align: left;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-title { font-weight: bold; color: var(--primary-color); font-size: 13px; text-transform: uppercase; }
+
+        .remove-btn {
+            background: #ffeeee;
+            color: var(--danger-color);
+            border: 1px solid #ffcccc;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase; }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .add-item-btn {
+            background: transparent;
+            border: 2px dashed #bbb;
+            color: #555;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .total-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        .total-price { font-size: 26px; font-weight: bold; display: block; margin-bottom: 5px; }
+        .total-subtitle { font-size: 11px; opacity: 0.8; }
+
+        .whatsapp-btn {
+            width: 100%;
+            background-color: var(--whatsapp-color);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Style pour le mode pause */
+        #pause-screen { display: none; padding: 40px 10px; }
+        .pause-icon { font-size: 50px; margin-bottom: 20px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" alt="Logo SHEIN">
+        </div>
+        
+        <h2>🛍️ Djib'Shopper 🇩🇯</h2>
+
+        <div id="pause-screen">
+            <span class="pause-icon">🌙</span>
+            <p><strong>Service en pause</strong><br>Nous revenons très vite pour vos commandes !</p>
+        </div>
+
+        <div id="main-form">
+            <div id="items-container">
+                <div class="item-block">
+                    <div class="item-header"><span class="item-title">Article N°1</span></div>
+                    <div class="input-group">
+                        <label>Lien de l'article SHEIN</label>
+                        <input type="url" class="lien-input" placeholder="Collez le lien ici">
+                    </div>
+                    <div class="input-group" style="display: flex; gap: 10px;">
+                         <div style="flex: 1;"><label>Taille / Couleur</label><input type="text" class="options-input" placeholder="Ex: M, Rouge"></div>
+                         <div style="flex: 1;"><label>Prix sur le site ($)</label><input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article</button>
+
+            <div class="total-section">
+                <span id="grandTotal" class="total-price">0 FDJ</span>
+                <span class="total-subtitle">Total estimé (Commission et livraison incluses)</span>
+            </div>
+
+            <button class="whatsapp-btn" onclick="envoyerWhatsApp()">
+                <span>➤</span> &nbsp; Valider la commande
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const EST_OUVERT = true; // <-- Change en 'false' seulement si tu veux fermer le site
+        const NUMERO_WHATSAPP = "33766901141";
+        const TAUX = 185;
+        const MARGE = 1.15;
+        const FRAIS_ARTICLE = 500;
+
+        // Gestion de l'affichage
+        if (!EST_OUVERT) {
+            document.getElementById('main-form').style.display = 'none';
+            document.getElementById('pause-screen').style.display = 'block';
+        }
+
+        let articleCount = 1;
+
+        function ajouterArticle() {
+            articleCount++;
+            const container = document.getElementById('items-container');
+            const div = document.createElement('div');
+            div.className = 'item-block';
+            div.innerHTML = `
+                <div class="item-header"><span class="item-title">Article N°${articleCount}</span><button class="remove-btn" onclick="this.closest('.item-block').remove(); calculerTotal();">✖</button></div>
+                <div class="input-group"><label>Lien de l'article</label><input type="url" class="lien-input" placeholder="Lien"></div>
+                <div class="input-group" style="display: flex; gap: 10px;">
+                    <div style="flex: 1;"><label>Options</label><input type="text" class="options-input" placeholder="Taille/Couleur"></div>
+                    <div style="flex: 1;"><label>Prix ($)</label><input type="number" class="prix-input" placeholder="0" oninput="calculerTotal()"></div>
+                </div>`;
+            container.appendChild(div);
+        }
+
+        function calculerTotal() {
+            let total = 0;
+            let count = 0;
+            document.querySelectorAll('.prix-input').forEach(input => {
+                let p = parseFloat(input.value);
+                if (p > 0) { total += p; count++; }
+            });
+            let final = Math.round((total * TAUX * MARGE) + (count * FRAIS_ARTICLE));
+            document.getElementById('grandTotal').innerText = (total > 0 ? final.toLocaleString() : "0") + " FDJ";
+        }
+
+        function envoyerWhatsApp() {
+            gtag('event', 'clic_whatsapp');
+            let msg = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande :\n\n";
+            let valid = false;
+            document.querySelectorAll('.item-block').forEach((b, i) => {
+                let l = b.querySelector('.lien-input').value;
+                let p = b.querySelector('.prix-input').value;
+                if(l && p) {
+                    valid = true;
+                    msg += `📦 *Article ${i+1}*\n🔗 ${l}\n🎨 ${b.querySelector('.options-input').value || "Standard"}\n💲 ${p} $\n\n`;
+                }
+            });
+            if(!valid) return alert("Remplis au moins un article !");
+            msg += `------------------\n💰 *TOTAL : ${document.getElementById('grandTotal').innerText}*`;
+            window.open("https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(msg));
+        }
+    </script>
+</body>
+</html>            align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
             color: var(--text-color);
