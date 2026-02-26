@@ -11,30 +11,147 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Djib'Shopper - Commandes SHEIN</title>
     
-    <title>Djib'Shopper - Commandes SHEIN Djibouti</title>
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#000000">
-    <link rel="icon" type="image/svg+xml" href="./logo.svg">
-    <link rel="apple-touch-icon" href="./logo.svg">
-
     <style>
-        /* --- DESIGN LUXE & PRO --- */
-        :root {
-            --primary-color: #000000;
-            --whatsapp-color: #25D366;
-            --text-color: #222222;
-            --danger-color: #ff4444;
+        :root { 
+            --primary: #000000; 
+            --text: #222222; 
+            --whatsapp: #25D366;
         }
-
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 30px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            background-attachment: fixed;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.98);
+            width: 100%; max-width: 420px;
+            padding: 40px 30px; border-radius: 12px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-sizing: border-box;
+        }
+        .logo-shein { max-width: 120px; margin-bottom: 20px; }
+        h2 { text-transform: uppercase; letter-spacing: 2px; font-size: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; }
+        
+        /* Style du Formulaire */
+        .item-block { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: left; border: 1px solid #eee; position: relative; }
+        label { font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .remove-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ff4444; cursor: pointer; font-weight: bold; }
+        .add-btn { background: none; border: 2px dashed #ccc; width: 100%; padding: 12px; cursor: pointer; margin-bottom: 15px; font-weight: bold; color: #555; }
+        .total-box { background: #000; color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+        .wa-btn { background: var(--whatsapp); color: white; border: none; width: 100%; padding: 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; text-transform: uppercase; }
+
+        /* Style Mode Pause */
+        .pause-content { padding: 40px 0; }
+        .pause-icon { font-size: 60px; margin-bottom: 20px; display: block; }
+        .pause-msg { font-size: 18px; color: #444; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app-container">
+        </div>
+
+    <script>
+        /* ============================================================
+           RÉGLAGE : METS 'true' POUR OUVRIR, 'false' POUR FERMER
+           ============================================================ */
+        const EST_OUVERT = false; 
+        /* ============================================================ */
+
+        const NUMERO_WA = "33766901141";
+        const container = document.getElementById('app-container');
+
+        if (EST_OUVERT) {
+            // AFFICHAGE DU SITE ACTIF
+            container.innerHTML = `
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" class="logo-shein">
+                <h2>Djib'Shopper 🇩🇯</h2>
+                <div id="items-list">
+                    <div class="item-block">
+                        <label>Lien de l'article SHEIN</label>
+                        <input type="url" class="p-lien" placeholder="Collez le lien ici">
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <div style="flex:1"><label>Taille / Couleur</label><input type="text" class="p-opt" placeholder="Ex: M, Noir"></div>
+                            <div style="flex:1"><label>Prix ($)</label><input type="number" class="p-prix" placeholder="0" oninput="recalculer()"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="ajouter()">+ AJOUTER UN ARTICLE</button>
+                <div class="total-box">
+                    <div id="display-total" style="font-size:28px; font-weight:bold;">0 FDJ</div>
+                    <div style="font-size:11px; opacity:0.8; letter-spacing:1px;">TOTAL ESTIMÉ (LIVRAISON INCLUSE)</div>
+                </div>
+                <button class="wa-btn" onclick="commander()">➤ VALIDER SUR WHATSAPP</button>
+            `;
+        } else {
+            // AFFICHAGE DU MODE PAUSE (RIEN D'AUTRE NE S'AFFICHE)
+            container.innerHTML = `
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" class="logo-shein" style="opacity:0.3">
+                <h2>Djib'Shopper 🇩🇯</h2>
+                <div class="pause-content">
+                    <span class="pause-icon">🔒</span>
+                    <div class="pause-msg">
+                        <strong>Service en pause</strong><br><br>
+                        Nous ne prenons plus de commandes pour le moment.<br>
+                        Revenez très bientôt pour de nouvelles pépites !
+                    </div>
+                </div>
+            `;
+        }
+
+        function ajouter() {
+            const div = document.createElement('div');
+            div.className = 'item-block';
+            div.innerHTML = `
+                <button class="remove-btn" onclick="this.parentElement.remove(); recalculer();">✕</button>
+                <label>Lien de l'article</label>
+                <input type="url" class="p-lien">
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <div style="flex:1"><label>Options</label><input type="text" class="p-opt"></div>
+                    <div style="flex:1"><label>Prix ($)</label><input type="number" class="p-prix" oninput="recalculer()"></div>
+                </div>`;
+            document.getElementById('items-list').appendChild(div);
+        }
+
+        function recalculer() {
+            let totalUsd = 0; let count = 0;
+            document.querySelectorAll('.p-prix').forEach(i => {
+                let p = parseFloat(i.value);
+                if(p > 0) { totalUsd += p; count++; }
+            });
+            let totalFdj = Math.round((totalUsd * 185 * 1.15) + (count * 500));
+            document.getElementById('display-total').innerText = (totalUsd > 0 ? totalFdj.toLocaleString() : "0") + " FDJ";
+        }
+
+        function commander() {
+            let finalTotal = document.getElementById('display-total').innerText;
+            let message = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande :\n\n";
+            let valid = false;
+            
+            document.querySelectorAll('.item-block').forEach((b, i) => {
+                let l = b.querySelector('.p-lien').value;
+                let p = b.querySelector('.p-prix').value;
+                if(l && p) {
+                    valid = true;
+                    message += `📦 *Article ${i+1}*\n🔗 ${l}\n🎨 ${b.querySelector('.p-opt').value || "Standard"}\n💲 ${p} $\n\n`;
+                }
+            });
+
+            if(!valid) { alert("Veuillez remplir au moins un article !"); return; }
+            message += `------------------\n💰 *TOTAL : ${finalTotal}*`;
+            window.open("https://wa.me/" + NUMERO_WA + "?text=" + encodeURIComponent(message));
+        }
+    </script>
+</body>
+</html>            min-height: 100vh;
             box-sizing: border-box;
             color: var(--text-color);
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
