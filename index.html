@@ -75,6 +75,16 @@
             padding-bottom: 15px;
         }
 
+        /* --- STYLE MODE PAUSE --- */
+        #ecran-pause {
+            display: none;
+            text-align: center;
+            padding: 40px 10px;
+        }
+        .pause-icon { font-size: 50px; margin-bottom: 20px; display: block; }
+        .pause-titre { font-size: 20px; font-weight: bold; margin-bottom: 15px; display: block; }
+        
+        /* --- STYLE MODE ACTIF --- */
         .item-block {
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid #eaeaea;
@@ -170,39 +180,57 @@
         
         <h2>🛍️ Djib'Shopper 🇩🇯</h2>
 
-        <div id="items-container">
-            <div class="item-block">
-                <div class="item-header"><span class="item-title">Article</span></div>
-                <div class="input-group">
-                    <label>Lien de l'article SHEIN</label>
-                    <input type="url" class="lien-input" placeholder="Colle le lien ici">
-                </div>
-                <div class="input-group" style="display: flex; gap: 10px;">
-                     <div style="flex: 1;">
-                        <label>Taille / Couleur</label>
-                        <input type="text" class="options-input" placeholder="Ex: M, Rouge">
-                     </div>
-                     <div style="flex: 1;">
-                        <label>Prix sur le site ($)</label>
-                        <input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
-                     </div>
+        <div id="ecran-pause">
+            <span class="pause-icon">🌙</span>
+            <span class="pause-titre">Service en pause</span>
+            <p>Nous ne prenons plus de commandes pour le moment. Revenez très bientôt !</p>
+        </div>
+
+        <div id="formulaire-achat">
+            <div id="items-container">
+                <div class="item-block">
+                    <div class="item-header"><span class="item-title">Article</span></div>
+                    <div class="input-group">
+                        <label>Lien de l'article SHEIN</label>
+                        <input type="url" class="lien-input" placeholder="Colle le lien ici">
+                    </div>
+                    <div class="input-group" style="display: flex; gap: 10px;">
+                         <div style="flex: 1;">
+                            <label>Taille / Couleur</label>
+                            <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                         </div>
+                         <div style="flex: 1;">
+                            <label>Prix sur le site ($)</label>
+                            <input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
+                         </div>
+                    </div>
                 </div>
             </div>
+
+            <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article</button>
+
+            <div class="total-section">
+                <span id="grandTotal" class="total-price">0 FDJ</span>
+                <span class="total-subtitle">Total estimé (Commission et livraison incluses)</span>
+            </div>
+
+            <button class="whatsapp-btn" onclick="envoyerWhatsApp()">
+                <span class="whatsapp-icon">➤</span> Valider la commande
+            </button>
         </div>
-
-        <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article</button>
-
-        <div class="total-section">
-            <span id="grandTotal" class="total-price">0 FDJ</span>
-            <span class="total-subtitle">Total estimé (Commission et livraison incluses)</span>
-        </div>
-
-        <button class="whatsapp-btn" onclick="envoyerWhatsApp()">
-            <span class="whatsapp-icon">➤</span> Valider la commande
-        </button>
     </div>
 
     <script>
+        /* === RÉGLAGES DU SITE === */
+        const EST_OUVERT = true; // <--- CHANGE EN 'false' POUR FERMER LES COMMANDES
+        /* ======================== */
+
+        // Bloquer l'affichage si fermé
+        if (!EST_OUVERT) {
+            document.getElementById('formulaire-achat').style.display = 'none';
+            document.getElementById('ecran-pause').style.display = 'block';
+        }
+
         // SERVICE WORKER PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
