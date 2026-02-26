@@ -7,7 +7,11 @@
     <title>Djib'Shopper - Commandes SHEIN Djibouti</title>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#000000">
-    <link rel="apple-touch-icon" href="./icon-512.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="./logo.svg">
+    <link rel="apple-touch-icon" href="./logo.svg">
+    
     <style>
         /* --- DESIGN LUXE & PRO --- */
         :root {
@@ -52,51 +56,153 @@
             .container { padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         }
 
-        .logo-container { text-align: center; margin-bottom: 25px; }
-        .logo-container img { max-width: 140px; height: auto; }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-container img {
+            max-width: 140px;
+            height: auto;
+        }
 
         h2 {
-            text-align: center; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1px; margin-bottom: 30px; font-size: 22px;
-            color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 15px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            font-size: 22px;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
         }
 
         .item-block {
-            background: rgba(255, 255, 255, 0.8); border: 1px solid #eaeaea;
-            padding: 20px; margin-bottom: 20px; border-radius: 6px; position: relative;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #eaeaea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            position: relative;
         }
 
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .item-title { font-weight: bold; color: var(--primary-color); font-size: 14px; text-transform: uppercase; }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
 
         .remove-btn {
-            background: #ffeeee; color: var(--danger-color); border: 1px solid #ffcccc;
-            padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.2s;
+            background: #ffeeee;
+            color: var(--danger-color);
+            border: 1px solid #ffcccc;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
         }
+
         .remove-btn:hover { background: var(--danger-color); color: white; }
 
         .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; background: #fff; transition: 0.3s; }
-        input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background: #fff;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
 
         .add-item-btn {
-            background: transparent; border: 2px dashed #bbb; color: #555;
-            width: 100%; padding: 12px; margin-bottom: 25px; cursor: pointer;
-            font-size: 14px; font-weight: bold; border-radius: 4px; transition: 0.3s;
+            background: transparent;
+            border: 2px dashed #bbb;
+            color: #555;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.3s;
         }
-        .add-item-btn:hover { border-color: var(--primary-color); color: var(--primary-color); background: rgba(0,0,0,0.02); }
 
-        .total-section { background-color: var(--primary-color); color: white; padding: 25px 20px; text-align: center; margin-bottom: 20px; border-radius: 6px; }
-        .total-price { font-size: 28px; font-weight: bold; display: block; margin-bottom: 5px; }
-        .total-subtitle { font-size: 12px; opacity: 0.85; font-weight: 300; }
+        .add-item-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .total-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        .total-price {
+            font-size: 28px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .total-subtitle {
+            font-size: 12px;
+            opacity: 0.85;
+            font-weight: 300;
+        }
 
         .whatsapp-btn {
-            width: 100%; background-color: var(--whatsapp-color); color: white;
-            padding: 18px; border: none; border-radius: 6px; font-size: 16px;
-            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            width: 100%;
+            background-color: var(--whatsapp-color);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .whatsapp-btn:hover { background-color: #1ebc53; transform: translateY(-2px); }
         .whatsapp-icon { margin-right: 10px; font-size: 20px; }
     </style>
@@ -127,7 +233,7 @@
                      </div>
                      <div style="flex: 1;">
                         <label>Prix sur le site ($)</label>
-                        <input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
+                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
             </div>
@@ -146,17 +252,18 @@
     </div>
 
     <script>
+        // --- SERVICE WORKER POUR LA PWA ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                  navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4geyBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7IH0pOw==')
-                .then(() => console.log("Service Worker PWA enregistré !"))
+                .then(() => console.log("Service Worker activé avec succès !"))
                 .catch(err => console.log("Erreur Service Worker : ", err));
             });
         }
+        // ----------------------------------
 
-        // --- NOUVEAUX REGLAGES DES PRIX ---
         const TAUX_DE_CHANGE = 185; 
-        const FRAIS_FIXES_PAR_ARTICLE = 700; // Plus de marge en %, juste 700 FDJ fixes par produit
+        const FRAIS_FIXES_PAR_ARTICLE = 700; 
         const NUMERO_WHATSAPP = "33766901141"; 
 
         let grandTotalFDJ = 0;
@@ -182,7 +289,7 @@
                      </div>
                      <div style="flex: 1;">
                         <label>Prix sur le site ($)</label>
-                        <input type="number" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
+                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
             `;
@@ -208,10 +315,8 @@
             });
 
             if (totalDollars > 0) {
-                // NOUVEAU CALCUL : (Somme USD * 185) + (Nbr d'articles * 700)
                 let prixConverti = totalDollars * TAUX_DE_CHANGE;
                 let totalFraisFixes = nombreArticlesValides * FRAIS_FIXES_PAR_ARTICLE;
-                
                 grandTotalFDJ = Math.round(prixConverti + totalFraisFixes);
                 document.getElementById('grandTotal').innerText = grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " FDJ";
             } else {
@@ -246,7 +351,7 @@
 
             message += `------------------\n`;
             message += `💰 *TOTAL ESTIMÉ : ${grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FDJ*\n`;
-            message += "(Incluant frais de livraison)\n\n";
+            message += "(Frais de livraison inclus)\n\n";
             message += "J'attends ta confirmation pour le paiement via Waafi / D-Money / CACPay.";
 
             let urlWhatsApp = "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(message);
