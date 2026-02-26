@@ -17,7 +17,7 @@
         :root {
             --primary: #000000;
             --wa: #25D366;
-            --bg-glass: rgba(255, 255, 255, 0.95);
+            --bg-glass: rgba(255, 255, 255, 0.98);
         }
 
         body {
@@ -35,6 +35,157 @@
             background-position: center;
             background-attachment: fixed;
         }
+
+        .container {
+            background: var(--bg-glass);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 25px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* --- STYLE DU LOGO --- */
+        .header-logo {
+            width: 100%;
+            max-width: 160px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        h2 {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 30px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .item-block {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
+        }
+
+        label { font-size: 11px; font-weight: bold; color: #777; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; margin-bottom: 10px; }
+
+        .add-btn { background: none; border: 2px dashed #aaa; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; color: #555; margin-bottom: 25px; }
+
+        .total-box { background: var(--primary); color: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; }
+        .total-price { font-size: 30px; font-weight: bold; display: block; }
+        
+        .wa-btn { background: var(--wa); color: white; width: 100%; padding: 20px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+
+        .pause-container { padding: 40px 0; }
+        .pause-icon { font-size: 70px; margin-bottom: 20px; display: block; }
+        .pause-msg { font-size: 18px; line-height: 1.6; color: #444; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" alt="SHEIN" class="header-logo">
+        <h2>Djib'Shopper 🇩🇯</h2>
+
+        <div id="content-area">
+            </div>
+    </div>
+
+    <script>
+        /* ===================================================
+           MODIFIER ICI : true = OUVERT / false = FERMÉ
+           =================================================== */
+        const EST_OUVERT = true; 
+        /* =================================================== */
+
+        const content = document.getElementById('content-area');
+
+        function genererPage() {
+            if (EST_OUVERT) {
+                content.innerHTML = `
+                    <div id="items-list">
+                        <div class="item-block">
+                            <label>Lien de l'article SHEIN</label>
+                            <input type="url" class="p-lien" placeholder="Collez le lien ici">
+                            <div style="display:flex; gap:10px;">
+                                <div style="flex:1"><label>Taille / Couleur</label><input type="text" class="p-opt" placeholder="M, Noir"></div>
+                                <div style="flex:1"><label>Prix ($)</label><input type="number" class="p-prix" placeholder="0" oninput="calculer()"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-btn" onclick="ajouter()">+ AJOUTER UN ARTICLE</button>
+                    <div class="total-box">
+                        <span id="display-total" class="total-price">0 FDJ</span>
+                        <span style="font-size:11px; opacity:0.8;">TOTAL ESTIMÉ (LIVRAISON INCLUSE)</span>
+                    </div>
+                    <button class="wa-btn" onclick="commander()">➤ VALIDER SUR WHATSAPP</button>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="pause-container">
+                        <span class="pause-icon">🌙</span>
+                        <div class="pause-msg">
+                            <strong>Service en pause</strong><br><br>
+                            Nous ne prenons plus de commandes pour le moment.<br>
+                            Revenez très bientôt !
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function ajouter() {
+            const div = document.createElement('div');
+            div.className = 'item-block';
+            div.innerHTML = `
+                <button onclick="this.parentElement.remove(); calculer();" style="position:absolute; top:10px; right:10px; border:none; background:none; color:red; cursor:pointer; font-weight:bold;">✕</button>
+                <label>Lien de l'article</label>
+                <input type="url" class="p-lien">
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1"><label>Options</label><input type="text" class="p-opt"></div>
+                    <div style="flex:1"><label>Prix ($)</label><input type="number" class="p-prix" oninput="calculer()"></div>
+                </div>`;
+            document.getElementById('items-list').appendChild(div);
+        }
+
+        function calculer() {
+            let t = 0; let n = 0;
+            document.querySelectorAll('.p-prix').forEach(i => {
+                let v = parseFloat(i.value); if(v > 0) { t += v; n++; }
+            });
+            let total = Math.round((t * 185 * 1.15) + (n * 500));
+            document.getElementById('display-total').innerText = (t > 0 ? total.toLocaleString() : "0") + " FDJ";
+        }
+
+        function commander() {
+            let msg = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande :\n\n";
+            let ok = false;
+            document.querySelectorAll('.item-block').forEach((b, i) => {
+                let l = b.querySelector('.p-lien').value;
+                let p = b.querySelector('.p-prix').value;
+                if(l && p) { ok = true; msg += `📦 *Art ${i+1}* : ${l}\n🎨 ${b.querySelector('.p-opt').value || "Standard"}\n💲 ${p} $\n\n`; }
+            });
+            if(!ok) return alert("Remplis au moins un article !");
+            msg += `💰 *TOTAL : ${document.getElementById('display-total').innerText}*`;
+            window.open("https://wa.me/33766901141?text=" + encodeURIComponent(msg));
+        }
+
+        genererPage();
+    </script>
+</body>
+</html>        }
 
         .container {
             background: var(--bg-glass);
