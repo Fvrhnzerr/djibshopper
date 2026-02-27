@@ -226,20 +226,24 @@
                     <label>Lien de l'article SHEIN</label>
                     <input type="url" class="lien-input" placeholder="Colle le lien ici">
                 </div>
+                <div class="input-group">
+                    <label>Taille / Couleur</label>
+                    <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                </div>
                 <div class="input-group" style="display: flex; gap: 10px;">
                      <div style="flex: 1;">
-                        <label>Taille / Couleur</label>
-                        <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                        <label>Quantité</label>
+                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
                      </div>
                      <div style="flex: 1;">
-                        <label>Prix sur le site ($)</label>
+                        <label>Prix unit. ($)</label>
                         <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
             </div>
         </div>
 
-        <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article</button>
+        <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article différent</button>
 
         <div class="total-section">
             <span id="grandTotal" class="total-price">0 FDJ</span>
@@ -282,13 +286,17 @@
                     <label>Lien de l'article SHEIN</label>
                     <input type="url" class="lien-input" placeholder="Colle le lien ici">
                 </div>
+                <div class="input-group">
+                    <label>Taille / Couleur</label>
+                    <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                </div>
                 <div class="input-group" style="display: flex; gap: 10px;">
                      <div style="flex: 1;">
-                        <label>Taille / Couleur</label>
-                        <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                        <label>Quantité</label>
+                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
                      </div>
                      <div style="flex: 1;">
-                        <label>Prix sur le site ($)</label>
+                        <label>Prix unit. ($)</label>
                         <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
@@ -303,20 +311,26 @@
 
         function calculerTotal() {
             let totalDollars = 0;
-            let nombreArticlesValides = 0;
-            const inputsPrix = document.querySelectorAll('.prix-input');
+            let totalQuantiteItems = 0; // On compte le nombre total d'articles physiques
+            const blocs = document.querySelectorAll('.item-block');
             
-            inputsPrix.forEach(input => {
-                let prix = parseFloat(input.value);
+            blocs.forEach(bloc => {
+                let prix = parseFloat(bloc.querySelector('.prix-input').value);
+                let qte = parseInt(bloc.querySelector('.qte-input').value);
+                
+                // Sécurité : si la quantité est vide ou 0, on compte 1 par défaut
+                if (isNaN(qte) || qte < 1) qte = 1;
+
                 if (prix > 0) {
-                    totalDollars += prix;
-                    nombreArticlesValides++;
+                    totalDollars += (prix * qte); // Prix multiplié par la quantité
+                    totalQuantiteItems += qte;    // On additionne les quantités pour les frais
                 }
             });
 
             if (totalDollars > 0) {
                 let prixConverti = totalDollars * TAUX_DE_CHANGE;
-                let totalFraisFixes = nombreArticlesValides * FRAIS_FIXES_PAR_ARTICLE;
+                let totalFraisFixes = totalQuantiteItems * FRAIS_FIXES_PAR_ARTICLE; // Frais x Quantité totale
+                
                 grandTotalFDJ = Math.round(prixConverti + totalFraisFixes);
                 document.getElementById('grandTotal').innerText = grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " FDJ";
             } else {
@@ -334,13 +348,15 @@
                 let lien = bloc.querySelector('.lien-input').value;
                 let options = bloc.querySelector('.options-input').value || "Non précisé";
                 let prix = bloc.querySelector('.prix-input').value;
+                let qte = bloc.querySelector('.qte-input').value || 1;
 
                 if(lien && prix) {
                     auMoinsUnArticle = true;
                     message += `📦 *Article N°${index + 1}* :\n`;
                     message += `🔗 Lien : ${lien}\n`;
                     message += `🎨 Options : ${options}\n`;
-                    message += `💲 Prix indiqué : ${prix} $\n\n`;
+                    message += `🔢 Quantité : ${qte}\n`;
+                    message += `💲 Prix unitaire : ${prix} $\n\n`;
                 }
             });
 
