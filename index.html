@@ -224,7 +224,7 @@
                 </div>
                 <div class="input-group">
                     <label>Lien de l'article SHEIN</label>
-                    <input type="url" class="lien-input" placeholder="Colle le vrai lien (http://...)">
+                    <input type="url" class="lien-input" placeholder="Colle le lien ici">
                 </div>
                 <div class="input-group">
                     <label>Taille / Couleur</label>
@@ -233,11 +233,11 @@
                 <div class="input-group" style="display: flex; gap: 10px;">
                      <div style="flex: 1;">
                         <label>Quantité</label>
-                        <input type="number" class="qte-input" value="1" min="1" step="1" oninput="calculerTotal()">
+                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
                      </div>
                      <div style="flex: 1;">
                         <label>Prix unit. ($)</label>
-                        <input type="number" inputmode="decimal" class="prix-input" min="0.01" step="0.01" placeholder="Ex: 15" oninput="calculerTotal()">
+                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
             </div>
@@ -284,7 +284,7 @@
                 </div>
                 <div class="input-group">
                     <label>Lien de l'article SHEIN</label>
-                    <input type="url" class="lien-input" placeholder="Colle le vrai lien (http://...)">
+                    <input type="url" class="lien-input" placeholder="Colle le lien ici">
                 </div>
                 <div class="input-group">
                     <label>Taille / Couleur</label>
@@ -293,11 +293,11 @@
                 <div class="input-group" style="display: flex; gap: 10px;">
                      <div style="flex: 1;">
                         <label>Quantité</label>
-                        <input type="number" class="qte-input" value="1" min="1" step="1" oninput="calculerTotal()">
+                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
                      </div>
                      <div style="flex: 1;">
                         <label>Prix unit. ($)</label>
-                        <input type="number" inputmode="decimal" class="prix-input" min="0.01" step="0.01" placeholder="Ex: 15" oninput="calculerTotal()">
+                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
                      </div>
                 </div>
             `;
@@ -311,24 +311,25 @@
 
         function calculerTotal() {
             let totalDollars = 0;
-            let totalQuantiteItems = 0; 
+            let totalQuantiteItems = 0; // On compte le nombre total d'articles physiques
             const blocs = document.querySelectorAll('.item-block');
             
             blocs.forEach(bloc => {
                 let prix = parseFloat(bloc.querySelector('.prix-input').value);
                 let qte = parseInt(bloc.querySelector('.qte-input').value);
                 
+                // Sécurité : si la quantité est vide ou 0, on compte 1 par défaut
                 if (isNaN(qte) || qte < 1) qte = 1;
 
-                if (!isNaN(prix) && prix > 0) {
-                    totalDollars += (prix * qte); 
-                    totalQuantiteItems += qte;    
+                if (prix > 0) {
+                    totalDollars += (prix * qte); // Prix multiplié par la quantité
+                    totalQuantiteItems += qte;    // On additionne les quantités pour les frais
                 }
             });
 
             if (totalDollars > 0) {
                 let prixConverti = totalDollars * TAUX_DE_CHANGE;
-                let totalFraisFixes = totalQuantiteItems * FRAIS_FIXES_PAR_ARTICLE; 
+                let totalFraisFixes = totalQuantiteItems * FRAIS_FIXES_PAR_ARTICLE; // Frais x Quantité totale
                 
                 grandTotalFDJ = Math.round(prixConverti + totalFraisFixes);
                 document.getElementById('grandTotal').innerText = grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " FDJ";
@@ -341,63 +342,29 @@
         function envoyerWhatsApp() {
             let message = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande SHEIN :\n\n";
             const blocs = document.querySelectorAll('.item-block');
-            
             let auMoinsUnArticle = false;
-            let aDesErreurs = false;
-            let messageErreur = "⚠️ Impossible d'envoyer la commande. Merci de corriger :\n\n";
 
             blocs.forEach((bloc, index) => {
-                let lien = bloc.querySelector('.lien-input').value.trim();
+                let lien = bloc.querySelector('.lien-input').value;
                 let options = bloc.querySelector('.options-input').value || "Non précisé";
-                let prix = parseFloat(bloc.querySelector('.prix-input').value);
-                let qte = parseInt(bloc.querySelector('.qte-input').value);
+                let prix = bloc.querySelector('.prix-input').value;
+                let qte = bloc.querySelector('.qte-input').value || 1;
 
-                // Si le bloc est au moins un peu rempli, on vérifie sérieusement
-                if(lien !== "" || !isNaN(prix)) {
+                if(lien && prix) {
                     auMoinsUnArticle = true;
-
-                    // 1. Vérification du Lien
-                    if (!lien.startsWith("http://") && !lien.startsWith("https://")) {
-                        aDesErreurs = true;
-                        messageErreur += `❌ Article ${index + 1} : Le lien doit commencer par http:// ou https://\n`;
-                    }
-
-                    // 2. Vérification du Prix
-                    if (isNaN(prix) || prix <= 0) {
-                        aDesErreurs = true;
-                        messageErreur += `❌ Article ${index + 1} : Le prix doit être un chiffre supérieur à 0.\n`;
-                    }
-
-                    // 3. Vérification de la Quantité
-                    if (isNaN(qte) || qte < 1) {
-                        aDesErreurs = true;
-                        messageErreur += `❌ Article ${index + 1} : La quantité doit être d'au moins 1.\n`;
-                    }
-
-                    // Si ce bloc n'a pas déclenché d'erreur, on prépare son texte
-                    if (!aDesErreurs) {
-                        message += `📦 *Article N°${index + 1}* :\n`;
-                        message += `🔗 Lien : ${lien}\n`;
-                        message += `🎨 Options : ${options}\n`;
-                        message += `🔢 Quantité : ${qte}\n`;
-                        message += `💲 Prix unitaire : ${prix} $\n\n`;
-                    }
+                    message += `📦 *Article N°${index + 1}* :\n`;
+                    message += `🔗 Lien : ${lien}\n`;
+                    message += `🎨 Options : ${options}\n`;
+                    message += `🔢 Quantité : ${qte}\n`;
+                    message += `💲 Prix unitaire : ${prix} $\n\n`;
                 }
             });
 
-            // S'il n'y a absolument rien d'écrit
             if(!auMoinsUnArticle) {
-                alert("⚠️ Ton panier est vide ! Merci de coller un lien et d'indiquer un prix avant de valider.");
+                alert("Merci de remplir au moins un article (Lien et Prix) !");
                 return;
             }
 
-            // S'il y a des erreurs de format
-            if(aDesErreurs) {
-                alert(messageErreur);
-                return; // Bloque l'envoi vers WhatsApp !
-            }
-
-            // Si tout est parfait, on envoie le message WhatsApp
             message += `------------------\n`;
             message += `💰 *TOTAL ESTIMÉ : ${grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FDJ*\n`;
             message += "(Frais de livraison inclus)\n\n";
