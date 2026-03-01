@@ -3,375 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Djib'Shopper - Commandes SHEIN Djibouti</title>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/svg+xml" href="./logo.svg">
-    <link rel="apple-touch-icon" href="./logo.svg">
     
     <style>
-        /* --- DESIGN LUXE & PRO --- */
         :root {
             --primary-color: #000000;
             --whatsapp-color: #25D366;
             --text-color: #222222;
             --danger-color: #ff4444;
+            --light-bg: #f9f9f9;
         }
 
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 30px 20px;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
             color: var(--text-color);
-            
-            /* Arrière-plan Mode */
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
-                        url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1920&auto=format&fit=crop');
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
-            background-position: center;
             background-attachment: fixed;
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.98);
             width: 100%;
             max-width: 450px;
-            padding: 40px 30px;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .logo-area { text-align: center; margin-bottom: 20px; }
+        .logo-area h1 { font-size: 40px; font-weight: 900; margin: 0; letter-spacing: -2px; }
+
+        h2 { text-align: center; font-size: 18px; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+
+        /* --- NOUVELLE SECTION PANIER DIRECT --- */
+        .cart-direct-section {
+            background: #f0f0f0;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 40px 25px; }
-            .container { padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        }
-
-        .logo-container {
-            text-align: center;
             margin-bottom: 25px;
+            border: 1px dashed #000;
         }
-
-        .logo-container img {
-            max-width: 140px;
-            height: auto;
-        }
-
-        h2 {
-            text-align: center;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            font-size: 22px;
-            color: var(--primary-color);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
+        .cart-direct-section label { color: #000; font-size: 13px; margin-bottom: 10px; display: block; }
+        .cart-direct-section textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            box-sizing: border-box;
+            resize: none;
         }
 
         .item-block {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #eaeaea;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 6px;
+            background: var(--light-bg);
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
             position: relative;
         }
 
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .item-title { font-weight: bold; font-size: 12px; text-transform: uppercase; }
+        .remove-btn { color: var(--danger-color); background: none; border: none; font-weight: bold; cursor: pointer; }
 
-        .item-title {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 14px;
-            text-transform: uppercase;
-        }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
 
-        .remove-btn {
-            background: #ffeeee;
-            color: var(--danger-color);
-            border: 1px solid #ffcccc;
-            padding: 4px 8px;
-            font-size: 11px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .remove-btn:hover { background: var(--danger-color); color: white; }
-
-        .input-group { margin-bottom: 15px; }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #666;
-            text-transform: uppercase;
-        }
-
-        input {
+        .add-btn {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background: #fff;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-
-        .add-item-btn {
-            background: transparent;
-            border: 2px dashed #bbb;
-            color: #555;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 25px;
-            cursor: pointer;
-            font-size: 14px;
+            background: none;
+            border: 2px dashed #000;
             font-weight: bold;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-
-        .add-item-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background: rgba(0,0,0,0.02);
-        }
-
-        .total-section {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
             margin-bottom: 20px;
-            border-radius: 6px;
+            cursor: pointer;
+            border-radius: 5px;
         }
 
-        .total-price {
-            font-size: 28px;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        .total-box {
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-
-        .total-subtitle {
-            font-size: 12px;
-            opacity: 0.85;
-            font-weight: 300;
-        }
+        .total-box .price { font-size: 32px; font-weight: bold; display: block; }
+        .total-box .info { font-size: 12px; opacity: 0.8; }
 
         .whatsapp-btn {
             width: 100%;
-            background-color: var(--whatsapp-color);
+            background: var(--whatsapp-color);
             color: white;
             padding: 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
-        .whatsapp-btn:hover { background-color: #1ebc53; transform: translateY(-2px); }
-        .whatsapp-icon { margin-right: 10px; font-size: 20px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/SHEIN_logo.svg" alt="Logo SHEIN" onerror="this.style.display='none'; document.getElementById('logo-secours').style.display='block';">
-            <h1 id="logo-secours" style="display: none; font-family: 'Helvetica', sans-serif; font-size: 38px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: -1px;">SHEIN</h1>
+        <div class="logo-area">
+            <h1>SHEIN</h1>
         </div>
         
         <h2>🛍️ Djib'Shopper 🇩🇯</h2>
 
-        <div id="items-container">
+        <div class="cart-direct-section">
+            <label>🚀 <b>Option Rapide :</b> Colle ici ton lien de panier partagé ou ta liste de liens</label>
+            <textarea id="directLinks" placeholder="Ex: Lien du panier ou liste de liens copiés..."></textarea>
+        </div>
+
+        <div id="items-list">
             <div class="item-block">
                 <div class="item-header">
-                    <span class="item-title">Article</span>
+                    <span class="item-title">Article 1</span>
                 </div>
                 <div class="input-group">
-                    <label>Lien de l'article SHEIN</label>
-                    <input type="url" class="lien-input" placeholder="Colle le lien ici">
+                    <label>Lien de l'article</label>
+                    <input type="url" class="l-input" placeholder="Lien HTTP de l'article">
                 </div>
                 <div class="input-group">
-                    <label>Taille / Couleur</label>
-                    <input type="text" class="options-input" placeholder="Ex: M, Rouge">
+                    <label>Taille / Couleur (Optionnel)</label>
+                    <input type="text" class="o-input" placeholder="Ex: L, Noir">
                 </div>
                 <div class="input-group" style="display: flex; gap: 10px;">
                      <div style="flex: 1;">
                         <label>Quantité</label>
-                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
+                        <input type="number" class="q-input" value="1" min="1" oninput="updateTotal()">
                      </div>
                      <div style="flex: 1;">
                         <label>Prix unit. ($)</label>
-                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
+                        <input type="number" inputmode="decimal" class="p-input" placeholder="Ex: 8.50" oninput="updateTotal()">
                      </div>
                 </div>
             </div>
         </div>
 
-        <button class="add-item-btn" onclick="ajouterArticle()">+ Ajouter un autre article différent</button>
+        <button class="add-btn" onclick="addItem()">+ Ajouter un autre article</button>
 
-        <div class="total-section">
-            <span id="grandTotal" class="total-price">0 FDJ</span>
-            <span class="total-subtitle">Total estimé (Frais de livraison inclus)</span>
+        <div class="total-box">
+            <span id="grandTotal" class="price">0 FDJ</span>
+            <span class="info">Frais de livraison inclus</span>
         </div>
 
-        <button class="whatsapp-btn" onclick="envoyerWhatsApp()">
-            <span class="whatsapp-icon">➤</span> Valider la commande
+        <button class="whatsapp-btn" onclick="sendOrder()">
+            ➤ Envoyer ma commande
         </button>
     </div>
 
     <script>
-        // --- SERVICE WORKER POUR LA PWA ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                 navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4geyBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7IH0pOw==')
-                .then(() => console.log("Service Worker activé avec succès !"))
-                .catch(err => console.log("Erreur Service Worker : ", err));
-            });
-        }
-        // ----------------------------------
+        const TAUX = 185;
+        const WA_PHONE = "33766901141";
 
-        const TAUX_DE_CHANGE = 185; 
-        const FRAIS_FIXES_PAR_ARTICLE = 700; 
-        const NUMERO_WHATSAPP = "33766901141"; 
-
-        let grandTotalFDJ = 0;
-
-        function ajouterArticle() {
-            const container = document.getElementById('items-container');
-            const nouveauBloc = document.createElement('div');
-            nouveauBloc.className = 'item-block';
-            
-            nouveauBloc.innerHTML = `
+        function addItem() {
+            const container = document.getElementById('items-list');
+            const div = document.createElement('div');
+            div.className = 'item-block';
+            div.innerHTML = `
                 <div class="item-header">
                     <span class="item-title">Article supplémentaire</span>
-                    <button class="remove-btn" onclick="supprimerArticle(this)">✖ Supprimer</button>
+                    <button class="remove-btn" onclick="this.closest('.item-block').remove(); updateTotal();">✖</button>
                 </div>
-                <div class="input-group">
-                    <label>Lien de l'article SHEIN</label>
-                    <input type="url" class="lien-input" placeholder="Colle le lien ici">
-                </div>
-                <div class="input-group">
-                    <label>Taille / Couleur</label>
-                    <input type="text" class="options-input" placeholder="Ex: M, Rouge">
-                </div>
+                <div class="input-group"><label>Lien de l'article</label><input type="url" class="l-input" placeholder="Lien HTTP"></div>
+                <div class="input-group"><label>Taille / Couleur</label><input type="text" class="o-input" placeholder="Ex: L, Noir"></div>
                 <div class="input-group" style="display: flex; gap: 10px;">
-                     <div style="flex: 1;">
-                        <label>Quantité</label>
-                        <input type="number" class="qte-input" value="1" min="1" oninput="calculerTotal()">
-                     </div>
-                     <div style="flex: 1;">
-                        <label>Prix unit. ($)</label>
-                        <input type="number" inputmode="decimal" class="prix-input" placeholder="Ex: 15" oninput="calculerTotal()">
-                     </div>
+                     <div style="flex: 1;"><label>Qte</label><input type="number" class="q-input" value="1" min="1" oninput="updateTotal()"></div>
+                     <div style="flex: 1;"><label>Prix $</label><input type="number" inputmode="decimal" class="p-input" oninput="updateTotal()"></div>
                 </div>
             `;
-            container.appendChild(nouveauBloc);
+            container.appendChild(div);
         }
 
-        function supprimerArticle(bouton) {
-            bouton.closest('.item-block').remove();
-            calculerTotal();
+        function updateTotal() {
+            let total = 0;
+            const blocks = document.querySelectorAll('.item-block');
+            blocks.forEach(b => {
+                let p = parseFloat(b.querySelector('.p-input').value);
+                let q = parseInt(b.querySelector('.q-input').value) || 1;
+                if (!isNaN(p) && p > 0) {
+                    let frais = (p <= 4) ? 400 : (p <= 7) ? 600 : 700;
+                    total += ((p * TAUX) + frais) * q;
+                }
+            });
+            document.getElementById('grandTotal').innerText = Math.round(total).toLocaleString() + " FDJ";
         }
 
-        function calculerTotal() {
-            let totalDollars = 0;
-            let totalQuantiteItems = 0; // On compte le nombre total d'articles physiques
-            const blocs = document.querySelectorAll('.item-block');
-            
-            blocs.forEach(bloc => {
-                let prix = parseFloat(bloc.querySelector('.prix-input').value);
-                let qte = parseInt(bloc.querySelector('.qte-input').value);
-                
-                // Sécurité : si la quantité est vide ou 0, on compte 1 par défaut
-                if (isNaN(qte) || qte < 1) qte = 1;
+        function sendOrder() {
+            let msg = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande :\n\n";
+            let direct = document.getElementById('directLinks').value.trim();
+            let hasItems = false;
 
-                if (prix > 0) {
-                    totalDollars += (prix * qte); // Prix multiplié par la quantité
-                    totalQuantiteItems += qte;    // On additionne les quantités pour les frais
+            if (direct) {
+                msg += `🛒 *LIEN PANIER / LISTE :*\n${direct}\n\n`;
+                hasItems = true;
+            }
+
+            const blocks = document.querySelectorAll('.item-block');
+            blocks.forEach((b, i) => {
+                let l = b.querySelector('.l-input').value.trim();
+                let p = b.querySelector('.p-input').value;
+                let q = b.querySelector('.q-input').value;
+                if (l && p > 0) {
+                    hasItems = true;
+                    msg += `📦 *Article ${i+1}* : ${l}\n🎨 Opt : ${b.querySelector('.o-input').value || "/"}\n🔢 Qte : ${q} | Prix : ${p}$\n\n`;
                 }
             });
 
-            if (totalDollars > 0) {
-                let prixConverti = totalDollars * TAUX_DE_CHANGE;
-                let totalFraisFixes = totalQuantiteItems * FRAIS_FIXES_PAR_ARTICLE; // Frais x Quantité totale
-                
-                grandTotalFDJ = Math.round(prixConverti + totalFraisFixes);
-                document.getElementById('grandTotal').innerText = grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " FDJ";
-            } else {
-                grandTotalFDJ = 0;
-                document.getElementById('grandTotal').innerText = "0 FDJ";
-            }
-        }
+            if (!hasItems) { alert("Veuillez remplir au moins un lien !"); return; }
 
-        function envoyerWhatsApp() {
-            let message = "Salut Djib'Shopper 🇩🇯 ! Voici ma commande SHEIN :\n\n";
-            const blocs = document.querySelectorAll('.item-block');
-            let auMoinsUnArticle = false;
-
-            blocs.forEach((bloc, index) => {
-                let lien = bloc.querySelector('.lien-input').value;
-                let options = bloc.querySelector('.options-input').value || "Non précisé";
-                let prix = bloc.querySelector('.prix-input').value;
-                let qte = bloc.querySelector('.qte-input').value || 1;
-
-                if(lien && prix) {
-                    auMoinsUnArticle = true;
-                    message += `📦 *Article N°${index + 1}* :\n`;
-                    message += `🔗 Lien : ${lien}\n`;
-                    message += `🎨 Options : ${options}\n`;
-                    message += `🔢 Quantité : ${qte}\n`;
-                    message += `💲 Prix unitaire : ${prix} $\n\n`;
-                }
-            });
-
-            if(!auMoinsUnArticle) {
-                alert("Merci de remplir au moins un article (Lien et Prix) !");
-                return;
-            }
-
-            message += `------------------\n`;
-            message += `💰 *TOTAL ESTIMÉ : ${grandTotalFDJ.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} FDJ*\n`;
-            message += "(Frais de livraison inclus)\n\n";
-            message += "J'attends ta confirmation pour le paiement via Waafi / D-Money / CACPay.";
-
-            let urlWhatsApp = "https://wa.me/" + NUMERO_WHATSAPP + "?text=" + encodeURIComponent(message);
-            window.open(urlWhatsApp, "_blank");
+            msg += `💰 *TOTAL ESTIMÉ : ${document.getElementById('grandTotal').innerText}*\n(Livraison incluse)`;
+            window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)}`, "_blank");
         }
     </script>
 </body>
